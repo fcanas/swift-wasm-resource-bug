@@ -1,0 +1,3 @@
+import SubPackageWithResource
+
+print(contentsOfResource())
