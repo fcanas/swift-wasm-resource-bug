@@ -1,17 +1,22 @@
 # swift-wasm-resource-bug
 
-This project demonstrates a problem witht he SwiftWASM toolchain. A dependency with a resource fails to compile because the  `Bundle.module` doesn't seem to be generated when built with the SwiftWASM toolchain. The upstream Swift toolchain works correctly.
+This project explores problems the SwiftWASM toolchain has around resources.
 
-## Correct output when run with Apple toolchain
-```
-#  Resource
+A dependency with a resource fails to have its resources copied by `carton bundle`.  The upstream Swift toolchain works correctly.
 
-I am a sample resource in the `SubPackageWithResource` package.
+This is the output of `carton bundle`:
+
+```
+Bundle
+├── TopLevelResource.md
+├── c78bdf2c8a889c8f.wasm
+├── c9143f6becf19317.js
+├── index.html
+└── swift-wasm-resource-bug_swift-wasm-resource-bug.resources
+    └── TopLevelResource.md
 ```
 
-## Error when build with Swift WASM toolchain
-```
-ERROR   value of type 'Bundle' has no member 'url'
-4 |      let url: URL = Bundle.module.url(forResource: "Resource", withExtension: "md")!
-```
+I see two potential issues:
 
+1. `TopLevelResource.md` appears twice. Once at the root, and once in a resource directory for the module. The specific resource directory seems more correct, as there could be name collisions across modules.
+2. `Resource.md` from the `SubPackageWithResource` package is missing entirely.

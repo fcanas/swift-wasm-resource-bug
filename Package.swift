@@ -20,7 +20,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "swift-wasm-resource-bug",
-            dependencies: ["SubPackageWithResource"]),
+            dependencies: ["SubPackageWithResource"],
+            resources: [.copy("TopLevelResource.md")]),
         .testTarget(
             name: "swift-wasm-resource-bugTests",
             dependencies: ["swift-wasm-resource-bug"]),
